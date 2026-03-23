@@ -48,6 +48,17 @@ const HeroSection = () => {
           <br className="hidden md:block" />
           <em className="not-italic text-gold"> need to read</em>
         </motion.h1>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.45 }}
+          className="mx-auto mt-4 flex flex-wrap items-center justify-center gap-3 font-body text-sm text-muted-foreground"
+        >
+          <span className="rounded-sm border border-border px-3 py-1">✦ Life Path Calculator</span>
+          <span className="rounded-sm border border-border px-3 py-1">𝓝 Name Numerology</span>
+          <span className="rounded-sm border border-border px-3 py-1">⌂ House Number</span>
+          <span className="rounded-sm border border-border px-3 py-1">☾ Moon Signs</span>
+        </motion.div>
         <motion.p
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
