@@ -1,4 +1,5 @@
 import HeroSection from "@/components/landing/HeroSection";
+import TrendingCarousel from "@/components/landing/TrendingCarousel";
 import QuickInsights from "@/components/landing/QuickInsights";
 import CalculatorHub from "@/components/landing/CalculatorHub";
 import FeaturedGuides from "@/components/landing/FeaturedGuides";
