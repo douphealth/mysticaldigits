@@ -4,7 +4,7 @@ import { ScrollReveal } from "./ScrollReveal";
 
 /* ── Numerology reduction helpers ── */
 const reduceToSingle = (num: number): number => {
-  if (num === 11 || num === 22 || num === 33) return num; // master numbers
+  if (num === 11 || num === 22 || num === 33) return num;
   while (num > 9) {
     num = String(num)
       .split("")
@@ -38,11 +38,18 @@ const lifePathMeta: Record<number, { keyword: string; brief: string }> = {
 /* ── Tab data ── */
 type CalcTab = "lifepath" | "name" | "house";
 
-const tabs: { id: CalcTab; label: string; symbol: string }[] = [
-  { id: "lifepath", label: "Life Path Number", symbol: "✦" },
-  { id: "name", label: "Name Number", symbol: "𝓝" },
-  { id: "house", label: "House Number", symbol: "⌂" },
+const tabs: { id: CalcTab; label: string; mobileLabel: string; symbol: string; desc: string }[] = [
+  { id: "lifepath", label: "Life Path Number", mobileLabel: "Life Path", symbol: "✦", desc: "From your birthdate" },
+  { id: "name", label: "Name Number", mobileLabel: "Name", symbol: "𝓝", desc: "From your full name" },
+  { id: "house", label: "House Number", mobileLabel: "House", symbol: "⌂", desc: "From your address" },
 ];
+
+/* ── Shared input class ── */
+const inputClass =
+  "w-full border border-border bg-parchment px-4 py-3.5 font-body text-center text-base text-foreground outline-none transition-all duration-200 focus:border-gold focus:shadow-[0_0_0_3px_hsl(var(--gold)/0.1)]";
+
+const btnClass =
+  "mt-6 w-full border-2 border-gold bg-gold px-6 py-4 font-body text-sm font-semibold uppercase tracking-[0.1em] text-foreground transition-all duration-200 hover:bg-transparent hover:text-gold active:scale-[0.97] disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-gold disabled:hover:text-foreground";
 
 /* ── Sub-components ── */
 
@@ -60,20 +67,23 @@ const ResultCard = ({
   guideLabel: string;
 }) => (
   <motion.div
-    initial={{ opacity: 0, y: 16, filter: "blur(4px)" }}
+    initial={{ opacity: 0, y: 20, filter: "blur(6px)" }}
     animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-    transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-    className="mt-8 border border-gold/30 bg-background p-6 text-center md:p-8"
+    transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+    className="mt-8 border border-gold/30 bg-parchment p-8 text-center md:p-10"
   >
-    <p className="font-body text-xs uppercase tracking-[0.2em] text-gold">Your Number</p>
-    <p className="mt-2 font-display text-5xl font-medium text-foreground md:text-6xl">{number}</p>
-    <p className="mt-1 font-display text-lg text-gold">{keyword}</p>
+    <p className="font-body text-xs uppercase tracking-[0.25em] text-gold">Your Number</p>
+    <div className="relative mx-auto mt-4 flex h-24 w-24 items-center justify-center md:h-28 md:w-28">
+      <div className="absolute inset-0 border border-gold/20" style={{ transform: "rotate(45deg)" }} />
+      <p className="font-display text-5xl font-medium text-foreground md:text-6xl">{number}</p>
+    </div>
+    <p className="mt-4 font-display text-xl text-gold md:text-2xl">{keyword}</p>
     <p className="mx-auto mt-4 max-w-md font-body text-base leading-relaxed text-muted-foreground text-pretty">
       {brief}
     </p>
     <a
       href={guideHref}
-      className="mt-6 inline-block border border-foreground bg-foreground px-6 py-3 font-body text-sm font-medium tracking-wide text-primary-foreground transition-all hover:bg-transparent hover:text-foreground active:scale-[0.97]"
+      className="mt-8 inline-block border-2 border-foreground bg-foreground px-8 py-3.5 font-body text-sm font-semibold uppercase tracking-[0.08em] text-primary-foreground transition-all duration-200 hover:bg-transparent hover:text-foreground active:scale-[0.97]"
     >
       {guideLabel} →
     </a>
@@ -102,48 +112,26 @@ const LifePathCalc = () => {
         Enter your date of birth to discover your Life Path Number — the most important number in your numerology chart.
       </p>
       <div className="mt-6 grid grid-cols-3 gap-3">
-        <div>
-          <label className="mb-1.5 block font-body text-xs uppercase tracking-wider text-muted-foreground">Month</label>
-          <input
-            type="number"
-            min={1}
-            max={12}
-            placeholder="MM"
-            value={month}
-            onChange={(e) => { setMonth(e.target.value); setResult(null); }}
-            className="w-full border border-border bg-background px-3 py-3 font-body text-center text-base text-foreground outline-none transition-colors focus:border-gold"
-          />
-        </div>
-        <div>
-          <label className="mb-1.5 block font-body text-xs uppercase tracking-wider text-muted-foreground">Day</label>
-          <input
-            type="number"
-            min={1}
-            max={31}
-            placeholder="DD"
-            value={day}
-            onChange={(e) => { setDay(e.target.value); setResult(null); }}
-            className="w-full border border-border bg-background px-3 py-3 font-body text-center text-base text-foreground outline-none transition-colors focus:border-gold"
-          />
-        </div>
-        <div>
-          <label className="mb-1.5 block font-body text-xs uppercase tracking-wider text-muted-foreground">Year</label>
-          <input
-            type="number"
-            min={1900}
-            max={2099}
-            placeholder="YYYY"
-            value={year}
-            onChange={(e) => { setYear(e.target.value); setResult(null); }}
-            className="w-full border border-border bg-background px-3 py-3 font-body text-center text-base text-foreground outline-none transition-colors focus:border-gold"
-          />
-        </div>
+        {[
+          { label: "Month", value: month, set: setMonth, ph: "MM", min: 1, max: 12 },
+          { label: "Day", value: day, set: setDay, ph: "DD", min: 1, max: 31 },
+          { label: "Year", value: year, set: setYear, ph: "YYYY", min: 1900, max: 2099 },
+        ].map((f) => (
+          <div key={f.label}>
+            <label className="mb-1.5 block font-body text-xs uppercase tracking-wider text-muted-foreground">{f.label}</label>
+            <input
+              type="number"
+              min={f.min}
+              max={f.max}
+              placeholder={f.ph}
+              value={f.value}
+              onChange={(e) => { f.set(e.target.value); setResult(null); }}
+              className={inputClass}
+            />
+          </div>
+        ))}
       </div>
-      <button
-        onClick={calculate}
-        disabled={!month || !day || !year || year.length < 4}
-        className="mt-5 w-full border border-gold bg-gold px-6 py-3.5 font-body text-sm font-medium tracking-wide text-foreground transition-all hover:bg-transparent hover:text-gold active:scale-[0.97] disabled:opacity-40 disabled:hover:bg-gold disabled:hover:text-foreground"
-      >
+      <button onClick={calculate} disabled={!month || !day || !year || year.length < 4} className={btnClass}>
         Calculate My Life Path
       </button>
       <AnimatePresence>
@@ -168,9 +156,7 @@ const NameCalc = () => {
 
   const calculate = useCallback(() => {
     if (!name.trim()) return;
-    const total = name
-      .split("")
-      .reduce((sum, c) => sum + letterValue(c), 0);
+    const total = name.split("").reduce((sum, c) => sum + letterValue(c), 0);
     setResult(reduceToSingle(total));
   }, [name]);
 
@@ -186,14 +172,10 @@ const NameCalc = () => {
           placeholder="e.g. Sophia Marie Laurent"
           value={name}
           onChange={(e) => { setName(e.target.value); setResult(null); }}
-          className="w-full border border-border bg-background px-4 py-3 font-body text-base text-foreground outline-none transition-colors focus:border-gold"
+          className={inputClass + " !text-left"}
         />
       </div>
-      <button
-        onClick={calculate}
-        disabled={!name.trim()}
-        className="mt-5 w-full border border-gold bg-gold px-6 py-3.5 font-body text-sm font-medium tracking-wide text-foreground transition-all hover:bg-transparent hover:text-gold active:scale-[0.97] disabled:opacity-40 disabled:hover:bg-gold disabled:hover:text-foreground"
-      >
+      <button onClick={calculate} disabled={!name.trim()} className={btnClass}>
         Calculate My Name Number
       </button>
       <AnimatePresence>
@@ -251,14 +233,10 @@ const HouseCalc = () => {
           placeholder="e.g. 1247 or 42B"
           value={address}
           onChange={(e) => { setAddress(e.target.value); setResult(null); }}
-          className="w-full border border-border bg-background px-4 py-3 font-body text-base text-foreground outline-none transition-colors focus:border-gold"
+          className={inputClass + " !text-left"}
         />
       </div>
-      <button
-        onClick={calculate}
-        disabled={!address.trim() || !/\d/.test(address)}
-        className="mt-5 w-full border border-gold bg-gold px-6 py-3.5 font-body text-sm font-medium tracking-wide text-foreground transition-all hover:bg-transparent hover:text-gold active:scale-[0.97] disabled:opacity-40 disabled:hover:bg-gold disabled:hover:text-foreground"
-      >
+      <button onClick={calculate} disabled={!address.trim() || !/\d/.test(address)} className={btnClass}>
         Calculate My House Number
       </button>
       <AnimatePresence>
@@ -281,49 +259,73 @@ const CalculatorHub = () => {
   const [activeTab, setActiveTab] = useState<CalcTab>("lifepath");
 
   return (
-    <section className="bg-sage/30 px-6 py-24 md:px-16 lg:px-24">
-      <div className="mx-auto max-w-2xl">
+    <section className="relative overflow-hidden px-6 py-24 md:px-16 lg:px-24">
+      {/* Decorative background */}
+      <div className="absolute inset-0 bg-sage/30" />
+      <div className="absolute left-0 top-0 h-px w-full bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+      <div className="absolute bottom-0 left-0 h-px w-full bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+
+      <div className="relative mx-auto max-w-2xl">
         <ScrollReveal>
-          <p className="text-center font-body text-sm uppercase tracking-[0.2em] text-gold">
-            Interactive Tools
-          </p>
-          <h2 className="mt-3 text-center font-display text-3xl font-medium leading-[1.15] tracking-tight text-foreground md:text-4xl">
-            Discover your numbers — instantly
-          </h2>
-          <p className="mx-auto mt-4 max-w-lg text-center font-body text-base leading-relaxed text-muted-foreground text-pretty">
-            Use our free calculators to uncover your Life Path, Expression Number, or House Energy. Then dive into the guide that matches your result.
-          </p>
+          <div className="text-center">
+            <span className="inline-flex items-center gap-2 rounded-sm border border-gold/30 bg-gold/10 px-4 py-1.5 font-body text-xs font-medium uppercase tracking-[0.2em] text-gold">
+              <span className="inline-block h-1.5 w-1.5 rounded-full bg-gold" />
+              Interactive Tools
+            </span>
+            <h2 className="mt-5 font-display text-3xl font-medium leading-[1.1] tracking-tight text-foreground md:text-4xl lg:text-[2.75rem]">
+              Discover your numbers
+              <br />
+              <em className="not-italic text-gold">— instantly</em>
+            </h2>
+            <p className="mx-auto mt-4 max-w-lg font-body text-base leading-relaxed text-muted-foreground text-pretty">
+              Use our free calculators to uncover your Life Path, Expression Number, or House Energy. Then dive into the guide that matches your result.
+            </p>
+          </div>
         </ScrollReveal>
 
         <ScrollReveal delay={0.15}>
-          {/* Tabs */}
-          <div className="mt-12 flex border-b border-border">
+          {/* Tab cards */}
+          <div className="mt-12 grid grid-cols-3 gap-3">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex-1 py-3 font-body text-sm font-medium tracking-wide transition-colors ${
+                className={`group relative flex flex-col items-center p-4 text-center transition-all duration-200 md:p-5 ${
                   activeTab === tab.id
-                    ? "border-b-2 border-gold text-foreground"
-                    : "text-muted-foreground hover:text-foreground"
+                    ? "border border-gold bg-background shadow-[0_4px_20px_-4px_hsl(var(--gold)/0.15)]"
+                    : "border border-border bg-background/60 hover:border-gold/40 hover:bg-background"
                 }`}
               >
-                <span className="mr-1.5">{tab.symbol}</span>
-                <span className="hidden sm:inline">{tab.label}</span>
-                <span className="sm:hidden">{tab.label.split(" ")[0]}</span>
+                <span className={`font-display text-2xl md:text-3xl ${activeTab === tab.id ? "text-gold" : "text-muted-foreground"}`}>
+                  {tab.symbol}
+                </span>
+                <span className={`mt-2 font-body text-xs font-semibold uppercase tracking-wider md:text-sm ${
+                  activeTab === tab.id ? "text-foreground" : "text-muted-foreground"
+                }`}>
+                  <span className="hidden sm:inline">{tab.label}</span>
+                  <span className="sm:hidden">{tab.mobileLabel}</span>
+                </span>
+                <span className="mt-1 hidden font-body text-[11px] text-muted-foreground sm:block">{tab.desc}</span>
+                {activeTab === tab.id && (
+                  <motion.div
+                    layoutId="activeTabIndicator"
+                    className="absolute -bottom-px left-4 right-4 h-0.5 bg-gold"
+                    transition={{ type: "spring", stiffness: 400, damping: 35 }}
+                  />
+                )}
               </button>
             ))}
           </div>
 
           {/* Calculator body */}
-          <div className="mt-8">
+          <div className="mt-8 border border-border bg-background p-6 md:p-10">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeTab}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                initial={{ opacity: 0, y: 10, filter: "blur(4px)" }}
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                exit={{ opacity: 0, y: -10, filter: "blur(4px)" }}
+                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
               >
                 {activeTab === "lifepath" && <LifePathCalc />}
                 {activeTab === "name" && <NameCalc />}
