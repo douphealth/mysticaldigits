@@ -39,9 +39,9 @@ const Index = () => {
         dangerouslySetInnerHTML={{ __html: JSON.stringify([websiteSchema, orgSchema]) }}
       />
       <HeroSection />
-      <TrendingCarousel />
       <QuickInsights />
       <CalculatorHub />
+      <TrendingCarousel />
       <FeaturedGuides />
       <CategoryPaths />
       <PopularReads />
