@@ -61,10 +61,10 @@ const tabs: { id: CalcTab; label: string; mobileLabel: string; symbol: string; d
 
 /* ── Shared styles ── */
 const inputClass =
-  "w-full border border-border bg-parchment px-4 py-3.5 font-body text-center text-base text-foreground outline-none transition-all duration-200 focus:border-gold focus:shadow-[0_0_0_3px_hsl(var(--gold)/0.15)] focus:bg-background";
+  "w-full border border-border bg-parchment px-3 py-3 font-body text-center text-base text-foreground outline-none transition-all duration-200 focus:border-gold focus:shadow-[0_0_0_3px_hsl(var(--gold)/0.15)] focus:bg-background sm:px-4 sm:py-3.5";
 
 const btnClass =
-  "mt-6 w-full border-2 border-gold bg-gold px-6 py-4 font-body text-sm font-semibold uppercase tracking-[0.1em] text-foreground transition-all duration-200 hover:bg-transparent hover:text-gold active:scale-[0.97] disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-gold disabled:hover:text-foreground";
+  "mt-5 w-full border-2 border-gold bg-gold px-5 py-3.5 font-body text-sm font-semibold uppercase tracking-[0.08em] text-foreground transition-all duration-200 hover:bg-transparent hover:text-gold active:scale-[0.97] disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-gold disabled:hover:text-foreground sm:mt-6 sm:px-6 sm:py-4 sm:tracking-[0.1em]";
 
 /* ── Result Card ── */
 const ResultCard = ({
@@ -84,25 +84,25 @@ const ResultCard = ({
     initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
     animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
     transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-    className="mt-8 relative overflow-hidden border border-gold/40 bg-gradient-to-b from-parchment to-background p-8 text-center md:p-10"
+    className="relative mt-6 overflow-hidden border border-gold/40 bg-gradient-to-b from-parchment to-background p-6 text-center sm:mt-8 sm:p-8 md:p-10"
   >
-    {/* Decorative corner marks */}
-    <div className="absolute top-3 left-3 h-6 w-6 border-t border-l border-gold/30" />
-    <div className="absolute top-3 right-3 h-6 w-6 border-t border-r border-gold/30" />
-    <div className="absolute bottom-3 left-3 h-6 w-6 border-b border-l border-gold/30" />
-    <div className="absolute bottom-3 right-3 h-6 w-6 border-b border-r border-gold/30" />
+    {/* Decorative corner marks — hidden on very small screens */}
+    <div className="absolute left-3 top-3 hidden h-6 w-6 border-l border-t border-gold/30 sm:block" />
+    <div className="absolute right-3 top-3 hidden h-6 w-6 border-r border-t border-gold/30 sm:block" />
+    <div className="absolute bottom-3 left-3 hidden h-6 w-6 border-b border-l border-gold/30 sm:block" />
+    <div className="absolute bottom-3 right-3 hidden h-6 w-6 border-b border-r border-gold/30 sm:block" />
 
-    <p className="font-body text-xs uppercase tracking-[0.25em] text-gold">Your Number</p>
+    <p className="font-body text-[10px] uppercase tracking-[0.25em] text-gold sm:text-xs">Your Number</p>
 
     {/* Diamond number container */}
-    <div className="relative mx-auto mt-5 flex h-28 w-28 items-center justify-center md:h-32 md:w-32">
+    <div className="relative mx-auto mt-4 flex h-20 w-20 items-center justify-center sm:mt-5 sm:h-28 sm:w-28 md:h-32 md:w-32">
       <div className="absolute inset-0 border border-gold/25" style={{ transform: "rotate(45deg)" }} />
       <div className="absolute inset-2 border border-gold/10" style={{ transform: "rotate(45deg)" }} />
       <motion.p
         initial={{ scale: 0.5, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-        className="font-display text-5xl font-medium text-foreground md:text-6xl"
+        className="font-display text-4xl font-medium text-foreground sm:text-5xl md:text-6xl"
       >
         {number}
       </motion.p>
@@ -113,8 +113,8 @@ const ResultCard = ({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.35 }}
     >
-      <p className="mt-5 font-display text-xl text-gold md:text-2xl">{keyword}</p>
-      <p className="mx-auto mt-4 max-w-md font-body text-base leading-relaxed text-muted-foreground text-pretty">
+      <p className="mt-4 font-display text-lg text-gold sm:mt-5 sm:text-xl md:text-2xl">{keyword}</p>
+      <p className="mx-auto mt-3 max-w-md font-body text-sm leading-relaxed text-muted-foreground text-pretty sm:mt-4 sm:text-base">
         {brief}
       </p>
     </motion.div>
@@ -124,7 +124,7 @@ const ResultCard = ({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.5 }}
       href={guideHref}
-      className="mt-8 inline-block border-2 border-foreground bg-foreground px-8 py-3.5 font-body text-sm font-semibold uppercase tracking-[0.08em] text-primary-foreground transition-all duration-200 hover:bg-transparent hover:text-foreground active:scale-[0.97]"
+      className="mt-6 inline-block w-full border-2 border-foreground bg-foreground px-6 py-3 font-body text-xs font-semibold uppercase tracking-[0.08em] text-primary-foreground transition-all duration-200 hover:bg-transparent hover:text-foreground active:scale-[0.97] sm:mt-8 sm:w-auto sm:px-8 sm:py-3.5 sm:text-sm"
     >
       {guideLabel} →
     </motion.a>
@@ -149,17 +149,17 @@ const LifePathCalc = () => {
 
   return (
     <div>
-      <p className="font-body text-base leading-relaxed text-muted-foreground text-pretty">
+      <p className="font-body text-sm leading-relaxed text-muted-foreground text-pretty sm:text-base">
         Enter your date of birth to discover your Life Path Number — the most important number in your numerology chart.
       </p>
-      <div className="mt-6 grid grid-cols-3 gap-3">
+      <div className="mt-5 grid grid-cols-3 gap-2 sm:mt-6 sm:gap-3">
         {[
           { label: "Month", value: month, set: setMonth, ph: "MM", min: 1, max: 12 },
           { label: "Day", value: day, set: setDay, ph: "DD", min: 1, max: 31 },
           { label: "Year", value: year, set: setYear, ph: "YYYY", min: 1900, max: 2099 },
         ].map((f) => (
           <div key={f.label}>
-            <label className="mb-1.5 block font-body text-xs uppercase tracking-wider text-muted-foreground">{f.label}</label>
+            <label className="mb-1 block font-body text-[10px] uppercase tracking-wider text-muted-foreground sm:mb-1.5 sm:text-xs">{f.label}</label>
             <input
               type="number"
               min={f.min}
@@ -203,11 +203,11 @@ const NameCalc = () => {
 
   return (
     <div>
-      <p className="font-body text-base leading-relaxed text-muted-foreground text-pretty">
+      <p className="font-body text-sm leading-relaxed text-muted-foreground text-pretty sm:text-base">
         Enter your full birth name to reveal your Expression Number — the number that describes your natural talents and abilities.
       </p>
-      <div className="mt-6">
-        <label className="mb-1.5 block font-body text-xs uppercase tracking-wider text-muted-foreground">Full Birth Name</label>
+      <div className="mt-5 sm:mt-6">
+        <label className="mb-1 block font-body text-[10px] uppercase tracking-wider text-muted-foreground sm:mb-1.5 sm:text-xs">Full Birth Name</label>
         <input
           type="text"
           placeholder="e.g. Sophia Marie Laurent"
@@ -249,11 +249,11 @@ const HouseCalc = () => {
 
   return (
     <div>
-      <p className="font-body text-base leading-relaxed text-muted-foreground text-pretty">
+      <p className="font-body text-sm leading-relaxed text-muted-foreground text-pretty sm:text-base">
         Enter your house or apartment number to discover the energetic signature of your living space.
       </p>
-      <div className="mt-6">
-        <label className="mb-1.5 block font-body text-xs uppercase tracking-wider text-muted-foreground">House / Apartment Number</label>
+      <div className="mt-5 sm:mt-6">
+        <label className="mb-1 block font-body text-[10px] uppercase tracking-wider text-muted-foreground sm:mb-1.5 sm:text-xs">House / Apartment Number</label>
         <input
           type="text"
           placeholder="e.g. 1247 or 42B"
@@ -285,7 +285,7 @@ const CalculatorHub = () => {
   const [activeTab, setActiveTab] = useState<CalcTab>("lifepath");
 
   return (
-    <section className="relative overflow-hidden px-6 py-28 md:px-16 lg:px-24 md:py-36">
+    <section className="relative overflow-hidden px-5 py-16 sm:px-6 sm:py-20 md:px-16 md:py-36 lg:px-24">
       {/* Rich layered background */}
       <div className="absolute inset-0 bg-gradient-to-b from-sage/40 via-parchment to-sage/30" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_0%,hsl(var(--gold)/0.08),transparent)]" />
@@ -293,28 +293,28 @@ const CalculatorHub = () => {
       <div className="absolute bottom-0 left-0 h-px w-full bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
       {/* Subtle geometric decorations */}
-      <div className="absolute top-12 left-12 h-32 w-32 border border-gold/[0.07] rotate-45 hidden lg:block" />
-      <div className="absolute bottom-12 right-12 h-24 w-24 border border-gold/[0.07] rotate-45 hidden lg:block" />
-      <div className="absolute top-1/2 left-8 -translate-y-1/2 h-48 w-px bg-gradient-to-b from-transparent via-gold/15 to-transparent hidden lg:block" />
-      <div className="absolute top-1/2 right-8 -translate-y-1/2 h-48 w-px bg-gradient-to-b from-transparent via-gold/15 to-transparent hidden lg:block" />
+      <div className="absolute left-12 top-12 hidden h-32 w-32 rotate-45 border border-gold/[0.07] lg:block" />
+      <div className="absolute bottom-12 right-12 hidden h-24 w-24 rotate-45 border border-gold/[0.07] lg:block" />
+      <div className="absolute left-8 top-1/2 hidden h-48 w-px -translate-y-1/2 bg-gradient-to-b from-transparent via-gold/15 to-transparent lg:block" />
+      <div className="absolute right-8 top-1/2 hidden h-48 w-px -translate-y-1/2 bg-gradient-to-b from-transparent via-gold/15 to-transparent lg:block" />
 
       <div className="relative mx-auto max-w-3xl">
         <ScrollReveal>
           <div className="text-center">
-            <span className="inline-flex items-center gap-2.5 border border-gold/30 bg-gold/10 px-5 py-2 font-body text-xs font-medium uppercase tracking-[0.2em] text-gold">
+            <span className="inline-flex items-center gap-2 border border-gold/30 bg-gold/10 px-4 py-1.5 font-body text-[10px] font-medium uppercase tracking-[0.2em] text-gold sm:gap-2.5 sm:px-5 sm:py-2 sm:text-xs">
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-gold opacity-50" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-gold" />
               </span>
               Free Interactive Tools
             </span>
-            <h2 className="mt-6 font-display text-4xl font-medium leading-[1.08] tracking-tight text-foreground md:text-5xl lg:text-[3.25rem]">
+            <h2 className="mt-5 font-display text-2xl font-medium leading-[1.1] tracking-tight text-foreground sm:mt-6 sm:text-3xl md:text-5xl lg:text-[3.25rem]">
               Discover your numbers
             </h2>
-            <p className="mt-2 font-display text-2xl text-gold md:text-3xl">
+            <p className="mt-1.5 font-display text-xl text-gold sm:mt-2 sm:text-2xl md:text-3xl">
               — calculated instantly
             </p>
-            <p className="mx-auto mt-5 max-w-xl font-body text-base leading-relaxed text-muted-foreground text-pretty md:text-lg">
+            <p className="mx-auto mt-4 max-w-xl font-body text-sm leading-relaxed text-muted-foreground text-pretty sm:mt-5 sm:text-base md:text-lg">
               Use our free numerology calculators to uncover your Life Path, Expression Number, or House Energy. Then dive into the guide that matches your result.
             </p>
           </div>
@@ -322,7 +322,7 @@ const CalculatorHub = () => {
 
         <ScrollReveal delay={0.12}>
           {/* Tab selectors */}
-          <div className="mt-14 grid grid-cols-3 gap-4">
+          <div className="mt-8 grid grid-cols-3 gap-2 sm:mt-14 sm:gap-4">
             {tabs.map((tab, i) => (
               <motion.button
                 key={tab.id}
@@ -331,34 +331,33 @@ const CalculatorHub = () => {
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.1 * i, ease: [0.16, 1, 0.3, 1] }}
-                className={`group relative flex flex-col items-center p-5 text-center transition-all duration-300 md:p-6 ${
+                className={`group relative flex flex-col items-center p-3 text-center transition-all duration-300 sm:p-5 md:p-6 ${
                   activeTab === tab.id
                     ? "border border-gold bg-gradient-to-b from-background to-parchment shadow-[0_8px_32px_-8px_hsl(var(--gold)/0.2),0_2px_8px_-2px_hsl(var(--gold)/0.1)]"
                     : "border border-border bg-background/80 hover:border-gold/40 hover:bg-background hover:shadow-[0_4px_16px_-4px_hsl(var(--gold)/0.08)]"
                 }`}
               >
-                {/* Glow on active */}
                 {activeTab === tab.id && (
                   <div className={`absolute inset-0 bg-gradient-to-b ${tab.color} opacity-60`} />
                 )}
 
-                <span className={`relative font-display text-3xl md:text-4xl transition-all duration-300 ${
-                  activeTab === tab.id ? "text-gold scale-110" : "text-muted-foreground group-hover:text-gold"
+                <span className={`relative font-display text-2xl transition-all duration-300 sm:text-3xl md:text-4xl ${
+                  activeTab === tab.id ? "scale-110 text-gold" : "text-muted-foreground group-hover:text-gold"
                 }`}>
                   {tab.symbol}
                 </span>
-                <span className={`relative mt-3 font-body text-xs font-semibold uppercase tracking-wider md:text-sm transition-colors duration-200 ${
+                <span className={`relative mt-1.5 font-body text-[10px] font-semibold uppercase tracking-wider sm:mt-3 sm:text-xs md:text-sm ${
                   activeTab === tab.id ? "text-foreground" : "text-muted-foreground"
                 }`}>
                   <span className="hidden sm:inline">{tab.label}</span>
                   <span className="sm:hidden">{tab.mobileLabel}</span>
                 </span>
-                <span className="relative mt-1 hidden font-body text-[11px] text-muted-foreground sm:block">{tab.desc}</span>
+                <span className="relative mt-0.5 hidden font-body text-[11px] text-muted-foreground sm:mt-1 sm:block">{tab.desc}</span>
 
                 {activeTab === tab.id && (
                   <motion.div
                     layoutId="activeTabIndicator"
-                    className="absolute -bottom-px left-4 right-4 h-0.5 bg-gold"
+                    className="absolute -bottom-px left-2 right-2 h-0.5 bg-gold sm:left-4 sm:right-4"
                     transition={{ type: "spring", stiffness: 400, damping: 35 }}
                   />
                 )}
@@ -367,7 +366,7 @@ const CalculatorHub = () => {
           </div>
 
           {/* Calculator body */}
-          <div className="mt-8 border border-border bg-background p-7 shadow-[0_4px_24px_-4px_hsl(var(--foreground)/0.04)] md:p-12">
+          <div className="mt-4 border border-border bg-background p-5 shadow-[0_4px_24px_-4px_hsl(var(--foreground)/0.04)] sm:mt-8 sm:p-7 md:p-12">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeTab}
@@ -386,21 +385,21 @@ const CalculatorHub = () => {
 
         {/* Trust strip */}
         <ScrollReveal delay={0.25}>
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 font-body text-xs text-muted-foreground">
-            <span className="flex items-center gap-1.5">
+          <div className="mt-6 grid grid-cols-2 gap-3 font-body text-[10px] text-muted-foreground sm:mt-10 sm:flex sm:flex-wrap sm:items-center sm:justify-center sm:gap-x-8 sm:gap-y-3 sm:text-xs">
+            <span className="flex items-center justify-center gap-1.5">
               <span className="text-gold">✦</span> 100% Free
             </span>
             <span className="hidden h-3 w-px bg-border sm:block" />
-            <span className="flex items-center gap-1.5">
-              <span className="text-gold">✦</span> No Sign-Up Required
+            <span className="flex items-center justify-center gap-1.5">
+              <span className="text-gold">✦</span> No Sign-Up
             </span>
             <span className="hidden h-3 w-px bg-border sm:block" />
-            <span className="flex items-center gap-1.5">
+            <span className="flex items-center justify-center gap-1.5">
               <span className="text-gold">✦</span> Instant Results
             </span>
             <span className="hidden h-3 w-px bg-border sm:block" />
-            <span className="flex items-center gap-1.5">
-              <span className="text-gold">✦</span> Master Numbers Included
+            <span className="flex items-center justify-center gap-1.5">
+              <span className="text-gold">✦</span> Master Numbers
             </span>
           </div>
         </ScrollReveal>

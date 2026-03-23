@@ -24,16 +24,16 @@ const insights = [
 ];
 
 const QuickInsights = () => (
-  <section className="border-y border-border px-6 py-16 md:px-16 lg:px-24">
-    <div className="mx-auto grid max-w-5xl gap-8 sm:grid-cols-2 lg:grid-cols-4">
+  <section className="border-y border-border px-5 py-12 sm:px-6 sm:py-16 md:px-16 lg:px-24">
+    <div className="mx-auto grid max-w-5xl grid-cols-2 gap-6 sm:gap-8 lg:grid-cols-4">
       {insights.map((item, i) => (
         <ScrollReveal key={i} delay={i * 0.08}>
           <div className="text-center">
-            <p className="font-display text-4xl font-medium text-gold md:text-5xl">{item.number}</p>
-            <p className="mt-2 font-body text-sm font-medium uppercase tracking-wider text-foreground">
+            <p className="font-display text-3xl font-medium text-gold sm:text-4xl md:text-5xl">{item.number}</p>
+            <p className="mt-1.5 font-body text-xs font-medium uppercase tracking-wider text-foreground sm:mt-2 sm:text-sm">
               {item.label}
             </p>
-            <p className="mt-1.5 font-body text-sm leading-relaxed text-muted-foreground">
+            <p className="mt-1 font-body text-xs leading-relaxed text-muted-foreground sm:mt-1.5 sm:text-sm">
               {item.detail}
             </p>
           </div>
